@@ -51,17 +51,27 @@ ggplot(ChickWeight, aes(
         theme_stata(scheme = "s1color") +
         theme(
                 plot.title = element_text(face = "bold", hjust = 0.5),
-                plot.caption = element_text(face = "bold", colour = "darkgray", hjust = 1),
+                plot.caption = element_text(
+                        face = "bold",
+                        colour = "darkgray",
+                        hjust = 1
+                ),
                 axis.title.x = element_text(face = "bold.italic"),
                 axis.title.y = element_text(face = "bold.italic"),
                 legend.position = "right"
-        ) 
+        )
 
 
 
 # Violin Plot -------------------------------------------------------------
 
-ggplot(data = wide, mapping = aes(x = Diet, y = gain, col = Diet, fill = Diet)) +
+ggplot(data = wide,
+       mapping = aes(
+               x = Diet,
+               y = gain,
+               col = Diet,
+               fill = Diet
+       )) +
         geom_violin(alpha = 0.5) +
         labs(
                 title = "Weight Gain by Diet",
@@ -72,24 +82,40 @@ ggplot(data = wide, mapping = aes(x = Diet, y = gain, col = Diet, fill = Diet)) 
         theme_economist_white() +
         theme(
                 plot.title = element_text(face = "bold", hjust = 0.5),
-                plot.caption = element_text(face = "bold", colour = "darkgray", hjust = 1),
+                plot.caption = element_text(
+                        face = "bold",
+                        colour = "darkgray",
+                        hjust = 1
+                ),
                 axis.title.x = element_text(face = "bold", color = "dimgray"),
-                axis.title.y = element_text(face = "bold", color = "dimgray", vjust = 3)
-        ) 
+                axis.title.y = element_text(
+                        face = "bold",
+                        color = "dimgray",
+                        vjust = 3
+                )
+        )
 
 
 # Difference in Means: Welch's two sample t-test --------------------------------------------------------
 
-# We want to test whether the weight gain in diet 1 is equal to the 
+# We want to test whether the weight gain in diet 1 is equal to the
 # weight gain in diet 4 (or not).
+# H0: MU_group1 - MU_group2 = 0
+# H1: Mu_group1 - MU_group2 != 0
 
 wide <- subset(wide, Diet %in% c(1, 4))
 
-# Confidence Interval for Unequal Variances 
-t.test(gain ~ Diet, data = wide, paired = F, var.equal = F,
-       mu = 0, alternative = "two.sided")$conf  |> 
-        as.numeric() |> 
-        round(2)
+# Confidence Interval for Unequal Variances
+t <-
+        t.test(
+                gain ~ Diet,
+                data = wide,
+                paired = F,
+                var.equal = F,
+                mu = 0,
+                alternative = "two.sided"
+        )
 
+t$conf |> as.numeric() |> round(2)
 # Difference in means C.I. is entirely negative.
-# Then Mu_group1 - Mu_group4 < 0, therefore Mu_group4 > Mu_group1 
+# Then Mu_group1 - Mu_group4 < 0, therefore Mu_group4 > Mu_group1
