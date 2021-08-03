@@ -1,17 +1,42 @@
 ### Packages ----------------------------------------------------------------
 
 library(ggplot2)
-library(dplyr)
 library(reshape2)
+library(dplyr)
 
 
-### Calculating Power -------------------------------------------------------
+# Calculating Type I and Type II Error Rate -------------------------------------------
 
 # Parameters to calculate Power
 alpha = 0.05
 mu0 = 30
+mua = 32
 sigma = 4
 z = qnorm(1 - alpha)
+n = 16
+
+# Type I Error Rate: Alpha
+alpha <- pnorm(
+        q = mu0 + z*sigma/sqrt(n),
+        mean = mu0,
+        sd = sigma/sqrt(n),
+        lower.tail = F
+)
+
+# Power of a Test
+beta_complement <- pnorm(
+        q = mu0 + z*sigma/sqrt(n),
+        mean = mua,
+        sd = sigma/sqrt(n),
+        lower.tail = F 
+)
+
+# Type II Error Rate: Beta
+beta <- 1 - beta_complement
+
+
+
+### Calculating Power -------------------------------------------------------
 
 sample_size <- local({
         k <- 1:7
