@@ -36,7 +36,7 @@ df <-
 set.seed(287)
 
 n <- 1e4
-list <- vector(mode = "list", length = n) |>
+sample <- vector(mode = "list", length = n) |>
         lapply(\(list_element)
                {
                        list_element <-
@@ -44,12 +44,12 @@ list <- vector(mode = "list", length = n) |>
                                     sample(price, length(price), replace = T))
         })
 
-list_medians <- list |> sapply(FUN = median)
+sample_medians <- sample |> sapply(FUN = median)
 
 
 # Bootstrap Distribution of the Median ------------------------------
 
-ggplot(mapping = aes(x = list_medians)) +
+ggplot(mapping = aes(x = sample_medians)) +
         geom_histogram(fill = "red3", col = "black", alpha = .8) +
         labs(
                 title = "Bootstrap Distribution of the Median",
@@ -68,3 +68,14 @@ ggplot(mapping = aes(x = list_medians)) +
                 axis.title.y = element_text(face = "bold",
                                             color = "dimgrey")
         )
+
+
+# Boostrap Estimation: Std. Error & Confidence Interval -------------------
+
+# Standard Error of the Sampling Distribution of the Sample Median
+se <- 
+        sd(sample_medians)
+
+# Confidence Interval for the Median
+CI <- 
+        quantile(x = sample_medians, probs = c(.025, .975))
