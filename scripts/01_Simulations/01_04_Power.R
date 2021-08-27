@@ -7,6 +7,7 @@ library(dplyr)
 
 # Calculating Type I and Type II Error Rate -------------------------------------------
 
+
 # Parameters to calculate Power
 alpha = 0.05
 mu0 = 30
